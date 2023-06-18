@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DEMO</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+<body>
+<div class="content" id="content">
+
+</div>
+</body>
+<script>
+    $.getJSON('http://localhost:8080/processed', function(data) {
+        var listDiv = document.getElementById('content');
+        var ul=document.createElement('ul');
+        for (var i = 0; i < data.length; ++i) {
+            if (data[i].question.label !== 1){
+                continue
+            }
+            var li=document.createElement('li');
+            li.innerHTML = data[i].question.text;   // Use innerHTML to set the text
+            var ul1=document.createElement('ul');
+            var shouldAppend = false
+            for (var j = 0; j < data[i].answers.length; ++j) {
+                if (data[i].answers[j].label !== 1){
+                    continue
+                }
+                shouldAppend = true
+                var li1=document.createElement('li');
+                li1.innerHTML = data[i].answers[j].text;
+                ul1.appendChild(li1);
+            }
+            li.appendChild(ul1)
+            li.appendChild(document.createElement('hr'))
+            if (shouldAppend) {
+                ul.appendChild(li);
+            }
+        }
+        listDiv.appendChild(ul);    // Note here
+    });
+</script>
+</html>
